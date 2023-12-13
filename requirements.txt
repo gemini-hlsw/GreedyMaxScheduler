@@ -15,7 +15,7 @@ omegaconf
 fastapi
 strawberry-graphql[fastapi]
 uvicorn[standard]
-lucupy
+lucupy==0.1.57
 pytest-asyncio
 gelidum
 python-dateutil
