@@ -26,6 +26,7 @@ __all__ = [
     'FaultResolutionEvent',
     'WeatherClosureEvent',
     'WeatherClosureResolutionEvent',
+    'ToOActivationEvent'
 ]
 
 
