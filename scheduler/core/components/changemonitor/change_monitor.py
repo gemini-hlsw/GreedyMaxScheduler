@@ -219,7 +219,7 @@ class ChangeMonitor(SchedulerComponent):
                                             timeslot_idx=event_timeslot,
                                             perform_time_accounting=False)
 
-            case ToOActivationEvent(too_id=too_id):
+            case ToOActivationEvent(too_id=too_id, target=target):
 
                 # If the site is blocked, we have no reason to recalculate a plan until all blocking events
                 # are unblocked.
@@ -262,11 +262,16 @@ class ChangeMonitor(SchedulerComponent):
                 too = self.collector.get_observation(too_id)
 
                 # Check that only Rapid ToOs are updated
-                if too.too_type is not TooType.RAPID:
+                if too.too_type is not TooType.RAPID or too.too_type is not TooType.STANDARD:
                     raise ValueError(f'ToO {too_id} is not RAPID.')
 
                 # Change status of an observation
                 too.status = ObservationStatus.READY
+
+                # Calculate target info
+                # TODO: This is for the time_period, the same as the rest.
+                self.collector.load_target_info_for_too(too, target)
+
                 return TimeCoordinateRecord(event=event,
                                             timeslot_idx=TimeslotIndex(event_timeslot + 1))
 
