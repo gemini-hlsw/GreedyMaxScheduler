@@ -7,7 +7,7 @@ from dataclasses import dataclass, field
 from datetime import datetime, timedelta
 from typing import final, FrozenSet
 
-from lucupy.minimodel import Resource, Site, TimeslotIndex, VariantSnapshot
+from lucupy.minimodel import Resource, Site, TimeslotIndex, VariantSnapshot, ObservationID, Target
 from lucupy.timeutils import time2slots
 
 
@@ -26,6 +26,7 @@ __all__ = [
     'FaultResolutionEvent',
     'WeatherClosureEvent',
     'WeatherClosureResolutionEvent',
+    'ToOActivationEvent'
 ]
 
 
@@ -138,6 +139,15 @@ class WeatherChangeEvent(InterruptionEvent):
     """
     variant_change: VariantSnapshot
 
+
+@final
+@dataclass(frozen=True)
+class ToOActivationEvent(InterruptionEvent):
+    """
+    Change the status of a ToO from ON_HOLD to READY.
+    """
+    too_id: ObservationID
+    target: Target
 
 @final
 @dataclass(frozen=True)

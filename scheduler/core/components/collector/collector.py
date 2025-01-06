@@ -267,8 +267,7 @@ class Collector(SchedulerComponent):
 
     def _calculate_target_info(self,
                                obs: Observation,
-                               target: Target,
-                               timing_windows: List[Time]) -> TargetInfoNightIndexMap:
+                               target: Target) -> TargetInfoNightIndexMap:
         """
         For a given site, calculate the information for a target for all the nights in
         the time grid and store this in the _target_information.
@@ -420,8 +419,12 @@ class Collector(SchedulerComponent):
             # Compute the timing window expansion for the observation.
             # Then, calculate the target information, which performs the visibility calculations.
             tw = self._process_timing_windows(program, obs)
-            ti = self._calculate_target_info(obs, base, tw)
+            ti = self._calculate_target_info(obs, base)
             Collector._target_info[base.name, obs.id] = ti
+
+    def load_target_info_for_too(self, obs: Observation, target: Target) -> None:
+        ti = self._calculate_target_info(obs, target)
+        Collector._target_info[target.name, obs.id] = ti
 
     def night_configurations(self,
                              site: Site,
